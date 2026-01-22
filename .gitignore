@@ -1,3 +1,10 @@
+# CMake builds
+out
+
+# Visual Studio cache
+.vs
+
+# Temporary files and build metadata
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
