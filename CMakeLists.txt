@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 file(GLOB_RECURSE SOURCES
     src/*.h
     src/*.cpp
-)
+)  
 add_executable(arietis ${SOURCES})
 
 # Relative path to SDL3 folder
