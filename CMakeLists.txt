@@ -4,9 +4,11 @@ project(ArietisEngine LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(arietis
-    src/main.cpp
+file(GLOB_RECURSE SOURCES
+    src/*.h
+    src/*.cpp
 )
+add_executable(arietis ${SOURCES})
 
 # Relative path to SDL3 folder
 set(SDL3_DIR "${CMAKE_SOURCE_DIR}/external/SDL3-3.4.0")
