@@ -2,19 +2,30 @@
 
 #include <SDL3/SDL.h>
 
-Widget::Widget(float x, float y, float width, float height, int render_layer, SDL_Renderer* renderer) {
-	m_render_layer = render_layer;
-	m_rect = {x, y, width, height};
-	m_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, static_cast<int>(width), static_cast<int>(height));
-}
+Widget::Widget(float x, float y, float width, float height, Uint8 red, Uint8 green, Uint8 blue, Uint8 alpha, int render_layer) {
+	m_color = {red, green, blue, alpha};
 
-Widget::~Widget() {
-	SDL_DestroyTexture(m_texture);
+	m_render_layer = render_layer;
+	m_frect = {x, y, width, height};
+
+	m_visible = true;
+	m_enabled = true;
 }
 
 void Widget::draw(SDL_Renderer* renderer) {
-	SDL_SetRenderDrawColor(renderer, 0x00, 0xFF, 0x00, 0xFF);
-	SDL_RenderFillRect(renderer, &m_rect);
+	if (!m_visible) {
+		return;
+	}
+	SDL_SetRenderDrawColor(renderer, m_color[0], m_color[1], m_color[2], m_color[3]);
+	SDL_RenderFillRect(renderer, &m_frect);
+}
+
+void Widget::set_visible(bool visible) {
+	m_visible = visible;
+}
+
+void Widget::set_enabled(bool enabled) {
+	m_enabled = enabled;
 }
 
 int Widget::get_render_layer() {

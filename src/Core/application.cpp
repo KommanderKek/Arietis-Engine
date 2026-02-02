@@ -1,18 +1,11 @@
 #include "application.h"
-#include "../Graphics/gui.h"
-#include "../Graphics/panel.h"
-
-#include <SDL3/SDL.h>
 
 Application::Application() {
-	m_main_window = nullptr;
-
-	m_main_menu = nullptr;
-
 	m_event_system = nullptr;
 	m_render_system = nullptr;
 	m_update_system = nullptr;
 	m_running = false;
+	m_initialized = false;
 }
 
 void Application::initialize() {
@@ -20,24 +13,30 @@ void Application::initialize() {
 
 	m_event_system = std::make_unique<EventSystem>();
 	m_render_system = std::make_unique<RenderSystem>();
+	m_update_system = std::make_unique<UpdateSystem>();
 
-	m_main_window = std::make_unique<Window>("Arietis Engine", 1920, 1080, SDL_WINDOW_RESIZABLE);
+	std::shared_ptr<WindowRenderer> main_window = std::make_shared<WindowRenderer>("Arietis Engine", 1920, 1080, SDL_WINDOW_RESIZABLE);
+	std::shared_ptr<GUI> main_menu = std::make_shared<GUI>();
+	std::shared_ptr<Panel> panel = std::make_shared<Panel>(0.0f, 0.0f, 1920.0f, 1080.0f);
 
-	SDL_Renderer* renderer = m_main_window->get_renderer();
+	std::shared_ptr<Widget> widget1 = std::make_shared<Widget>(100.0f, 100.0f, 100.0f, 100.0f, 0, 255, 0, 255, 0);
+	std::shared_ptr<Widget> widget2 = std::make_shared<Widget>(150.0f, 150.0f, 100.0f, 100.0f, 255, 0, 0, 255, 1);
 
-	m_main_menu = std::make_unique<GUI>();
-	Panel* main_panel = m_main_menu->create_panel(0, 0, 1920, 1080);
-	Widget* widget = main_panel->create_widget(100, 100, 500, 500, 0, renderer);
+	main_window->add_gui(main_menu);
+	m_render_system->add_window(main_window);
 
-	m_render_system->add_renderable(widget);
-
-	m_render_system->set_render_target(renderer, nullptr);
+	panel->add_widget(widget1);
+	panel->add_widget(widget2);
+	main_menu->add_panel(panel);
 
 	m_running = true;
+	m_initialized = true;
 }
 
 void Application::deinit() {
-	m_main_window.reset();
+	if (!m_initialized) {
+		return;
+	}
 	SDL_Quit();
 }
 
@@ -58,10 +57,11 @@ void Application::process_events() {
 }
 
 void Application::update() {
+	m_update_system->frame_update();
 }
 
 void Application::render() {
-	m_render_system->render(m_main_window->get_renderer());
+	m_render_system->render_windows();
 }
 
 void Application::stop() {

@@ -1,21 +1,16 @@
 #pragma once
 
-#include "SDL3/SDL.h"
+#include "windowrenderer.h"
 
 #include <vector>
-
-class Widget;
+#include <memory>
 
 class RenderSystem {
 private:
-	std::vector<Widget*> m_renderables;
+	std::vector<std::shared_ptr<WindowRenderer>> m_windows;
 
 public:
-	void render(SDL_Renderer* renderer);
-	void set_render_target(SDL_Renderer* renderer, SDL_Texture* texture);
-	void add_renderable(Widget* renderable);
-	void remove_renderable(Widget* renderable);
-
-private:
-	void sort_renderables();
+	void add_window(std::shared_ptr<WindowRenderer> window);
+	void remove_window(std::shared_ptr<WindowRenderer> window);
+	void render_windows();
 };
