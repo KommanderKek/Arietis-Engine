@@ -2,45 +2,30 @@
 
 #include <algorithm>
 
-GUI::GUI() {
-	m_widgets_set = false;
+void GUI::add_widget(std::shared_ptr<Widget> widget) {
+	m_widgets.push_back(widget);
+	m_widgets_sorted = false;
 }
 
-void GUI::add_panel(std::shared_ptr<Panel> panel) {
-	m_panels.push_back(panel);
-	m_widgets_set = false;
-}
-
-void GUI::remove_panel(std::shared_ptr<Panel> panel) {
-	std::vector<std::shared_ptr<Panel>>::iterator it = std::find(m_panels.begin(), m_panels.end(), panel);
-	if (it == m_panels.end()) {
+void GUI::remove_widget(std::shared_ptr<Widget> widget) {
+	std::vector<std::shared_ptr<Widget>>::iterator it = std::find(m_widgets.begin(), m_widgets.end(), widget);
+	if (it == m_widgets.end()) {
 		return;
 	}
-	m_panels.erase(it);
-	m_widgets_set = false;
+	m_widgets.erase(it);
 }
 
 void GUI::render_widgets(SDL_Renderer* renderer) {
-	if (!m_widgets_set) {
-		set_widgets();
-		m_widgets_set = true;
+	if (!m_widgets_sorted) {
+		sort_widgets();
+		m_widgets_sorted = true;
 	}
 	for (std::shared_ptr<Widget> widget : m_widgets) {
 		widget->draw(renderer);
 	}
 }
 
-void GUI::set_widgets() {
-	// clear widget array
-	m_widgets.clear();
-
-	// collect widgets from panels
-	for (std::shared_ptr<Panel> panel : m_panels) {
-		std::vector<std::shared_ptr<Widget>> widgets = panel->get_widgets();
-		m_widgets.insert(m_widgets.end(), widgets.begin(), widgets.end());
-	}
-
-	// sort widgets by render layer
+void GUI::sort_widgets() {
 	std::stable_sort(m_widgets.begin(), m_widgets.end(),
 		[](std::shared_ptr<Widget> a, std::shared_ptr<Widget> b) {
 			return a->get_render_layer() < b->get_render_layer();

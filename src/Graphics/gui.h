@@ -1,22 +1,20 @@
 #pragma once
 
-#include "Panel.h"
+#include "widget.h"
 
 #include <memory>
 #include <vector>
 
 class GUI {
 private:
-	std::vector<std::shared_ptr<Panel>> m_panels;
 	std::vector<std::shared_ptr<Widget>> m_widgets;
-	bool m_widgets_set;
+	bool m_widgets_sorted;
 
 public:
-	GUI();
-	void add_panel(std::shared_ptr<Panel> panel);
-	void remove_panel(std::shared_ptr<Panel> panel);
+	void add_widget(std::shared_ptr<Widget> widget);
+	void remove_widget(std::shared_ptr<Widget> widget);
 	void render_widgets(SDL_Renderer* renderer);
 
 private:
-	void set_widgets();
+	void sort_widgets();
 };
