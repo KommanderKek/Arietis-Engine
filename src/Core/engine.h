@@ -3,6 +3,7 @@
 #include "../Events/eventsystem.h"
 #include "../Graphics/rendersystem.h"
 #include "../Update/updatesystem.h"
+#include "../Graphics/image.h"
 
 class Engine {
 private:

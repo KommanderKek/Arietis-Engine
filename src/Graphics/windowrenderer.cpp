@@ -20,6 +20,7 @@ WindowRenderer::~WindowRenderer() {
 }
 
 void WindowRenderer::add_gui(std::shared_ptr<GUI> gui) {
+	gui->create_textures(m_renderer);
 	m_guis.push_back(gui);
 }
 
@@ -32,9 +33,11 @@ void WindowRenderer::remove_gui(std::shared_ptr<GUI> gui) {
 }
 
 void WindowRenderer::render_guis() {
+	SDL_SetRenderTarget(m_renderer, NULL);
 	SDL_SetRenderDrawColor(m_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 	SDL_RenderClear(m_renderer);
 	if (m_guis.empty()) {
+		SDL_RenderPresent(m_renderer);
 		return;
 	}
 	for (std::shared_ptr<GUI> gui : m_guis) {

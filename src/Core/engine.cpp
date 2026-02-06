@@ -37,6 +37,7 @@ void Engine::run() {
 
 void Engine::register_window(std::shared_ptr<WindowRenderer> window) {
 	m_render_system->add_window(window);
+	m_update_system->add_window(window);
 }
 
 void Engine::process_events() {

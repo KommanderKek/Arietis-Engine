@@ -1,6 +1,7 @@
 #pragma once
 
 #include "widget.h"
+#include "image.h"
 
 #include <memory>
 #include <vector>
@@ -14,6 +15,7 @@ public:
 	void add_widget(std::shared_ptr<Widget> widget);
 	void remove_widget(std::shared_ptr<Widget> widget);
 	void render_widgets(SDL_Renderer* renderer);
+	void create_textures(SDL_Renderer* renderer);
 
 private:
 	void sort_widgets();

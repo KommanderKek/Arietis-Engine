@@ -25,6 +25,14 @@ void GUI::render_widgets(SDL_Renderer* renderer) {
 	}
 }
 
+void GUI::create_textures(SDL_Renderer* renderer) {
+	for (std::shared_ptr<Widget> widget : m_widgets) {
+		if (std::shared_ptr<Image> image = std::dynamic_pointer_cast<Image>(widget)) {
+			image->create_texture(renderer);
+		}
+	}
+}
+
 void GUI::sort_widgets() {
 	std::stable_sort(m_widgets.begin(), m_widgets.end(),
 		[](std::shared_ptr<Widget> a, std::shared_ptr<Widget> b) {

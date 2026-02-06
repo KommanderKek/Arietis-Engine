@@ -14,7 +14,7 @@ protected:
 
 public:
 	Widget(float x, float y, float width, float height, Uint8 red, Uint8 green, Uint8 blue, Uint8 alpha, int render_layer);
-	void draw(SDL_Renderer* renderer);
+	virtual void draw(SDL_Renderer* renderer);
 	void set_visible(bool visible);
 	void set_enabled(bool enabled);
 	int get_render_layer();
