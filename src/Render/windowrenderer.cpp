@@ -1,5 +1,6 @@
 #include "windowrenderer.h"
-#include "widget.h"
+#include "../Graphics/widget.h"
+#include "../Graphics/gui.h"
 
 #include <algorithm>
 
@@ -20,7 +21,6 @@ WindowRenderer::~WindowRenderer() {
 }
 
 void WindowRenderer::add_gui(std::shared_ptr<GUI> gui) {
-	gui->create_textures(m_renderer);
 	m_guis.push_back(gui);
 }
 
@@ -34,14 +34,27 @@ void WindowRenderer::remove_gui(std::shared_ptr<GUI> gui) {
 
 void WindowRenderer::render_guis() {
 	SDL_SetRenderTarget(m_renderer, NULL);
-	SDL_SetRenderDrawColor(m_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+	SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
 	SDL_RenderClear(m_renderer);
-	if (m_guis.empty()) {
-		SDL_RenderPresent(m_renderer);
-		return;
-	}
-	for (std::shared_ptr<GUI> gui : m_guis) {
-		gui->render_widgets(m_renderer);
+	if (!m_guis.empty()) {
+		for (std::shared_ptr<GUI> gui : m_guis) {
+			gui->render_widgets(m_renderer);
+		}
 	}
 	SDL_RenderPresent(m_renderer);
+}
+
+void WindowRenderer::dispatch_event(SDL_Event* event) {
+	// Only handle events for top-most enabled GUI
+	for (int i = m_guis.size() - 1; i >= 0; i--) {
+		std::shared_ptr<GUI> gui = m_guis[i];
+		if (gui->get_enabled()) {
+			gui->handle_event(event);
+			return;
+		}
+	}
+}
+
+SDL_Window* WindowRenderer::get_sdl_window() {
+	return m_window;
 }

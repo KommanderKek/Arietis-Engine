@@ -1,21 +1,33 @@
 #include "application.h"
 
+#include <memory>
+#include <functional>
+
 void Application::init() {
-	engine.initialize();
+	m_engine.initialize();
 
 	std::shared_ptr<WindowRenderer> window = std::make_shared<WindowRenderer>("Arietis Engine", 1920, 1080, SDL_WINDOW_RESIZABLE);
 	std::shared_ptr<GUI> main_menu = std::make_shared<GUI>();
-	std::shared_ptr<Widget> widget1 = std::make_shared<Widget>(100.0f, 100.0f, 100.0f, 100.0f, 255, 0, 0, 255, 1);
-	std::shared_ptr<Widget> widget2 = std::make_shared<Widget>(150.0f, 150.0f, 100.0f, 100.0f, 0, 255, 0, 255, 0);
-	std::shared_ptr<Image> image = std::make_shared<Image>(200.0f, 200.0f, 100.0f, 100.0f, 2, "sample.bmp");
+	std::shared_ptr<Widget> widget1 = std::make_shared<Widget>(100.0f, 100.0f, 100.0f, 100.0f, 1);
+	std::shared_ptr<Widget> widget2 = std::make_shared<Widget>(150.0f, 150.0f, 100.0f, 100.0f, 0);
+	widget1->set_color(255, 0, 0, 255);
+	widget2->set_color(0, 255, 0, 255);
+	std::shared_ptr<Image> image = std::make_shared<Image>(175.0f, 175.0f, 100.0f, 100.0f, 2, "sample.bmp");
+	std::shared_ptr<Button> button = std::make_shared<Button>(300.0f, 300.0f, 100.0f, 100.0f, 0);
+	button->set_color(0, 0, 255, 255);
 
 	main_menu->add_widget(widget1);
 	main_menu->add_widget(widget2);
 	main_menu->add_widget(image);
+	main_menu->add_widget(button);
 	window->add_gui(main_menu);
-	engine.register_window(window);
+	m_engine.register_window(window);
 }
 
-void Application::run() {
-	engine.run();
+void Application::start() {
+	m_engine.run();
+}
+
+void Application::deinit() {
+	m_engine.shutdown();
 }

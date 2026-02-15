@@ -2,13 +2,12 @@
 
 #include "./Core/engine.h"
 
-#include <memory>
-
 class Application {
 private:
-	Engine engine;
+	Engine m_engine;
 
 public:
 	void init();
-	void run();
+	void start();
+	void deinit();
 };

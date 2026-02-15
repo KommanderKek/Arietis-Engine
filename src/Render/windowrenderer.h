@@ -1,7 +1,7 @@
 #pragma once
 
-#include "widget.h"
-#include "gui.h"
+#include "../Graphics/widget.h"
+#include "../Graphics/gui.h"
 
 #include <SDL3/SDL.h>
 
@@ -27,4 +27,6 @@ public:
 	void add_gui(std::shared_ptr<GUI> gui);
 	void remove_gui(std::shared_ptr<GUI> gui);
 	void render_guis();
+	void dispatch_event(SDL_Event* event);
+	SDL_Window* get_sdl_window();
 };
