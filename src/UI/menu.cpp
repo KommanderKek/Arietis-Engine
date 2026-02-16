@@ -1,19 +1,21 @@
-#include "gui.h"
+#include "menu.h"
 #include "button.h"
 
 #include <algorithm>
 
-GUI::GUI() {
+using namespace Arietis::UI;
+
+Menu::Menu() {
 	m_widgets_sorted = false;
 	m_enabled = true;
 }
 
-void GUI::add_widget(std::shared_ptr<Widget> widget) {
+void Menu::add_widget(std::shared_ptr<Widget> widget) {
 	m_widgets.push_back(widget);
 	m_widgets_sorted = false;
 }
 
-void GUI::remove_widget(std::shared_ptr<Widget> widget) {
+void Menu::remove_widget(std::shared_ptr<Widget> widget) {
 	std::vector<std::shared_ptr<Widget>>::iterator it = std::find(m_widgets.begin(), m_widgets.end(), widget);
 	if (it == m_widgets.end()) {
 		return;
@@ -21,7 +23,7 @@ void GUI::remove_widget(std::shared_ptr<Widget> widget) {
 	m_widgets.erase(it);
 }
 
-void GUI::render_widgets(SDL_Renderer* renderer) {
+void Menu::render_widgets(SDL_Renderer* renderer) {
 	if (!m_widgets_sorted) {
 		sort_widgets();
 		m_widgets_sorted = true;
@@ -31,7 +33,7 @@ void GUI::render_widgets(SDL_Renderer* renderer) {
 	}
 }
 
-void GUI::handle_event(SDL_Event* event) {
+void Menu::handle_event(SDL_Event* event) {
 	// check widget events
 	if (!m_widgets_sorted) {
 		sort_widgets();
@@ -47,15 +49,15 @@ void GUI::handle_event(SDL_Event* event) {
 	}
 }
 
-bool GUI::get_enabled() {
+bool Menu::get_enabled() {
 	return m_enabled;
 }
 
-void GUI::set_enabled(bool enabled) {
+void Menu::set_enabled(bool enabled) {
 	m_enabled = enabled;
 }
 
-void GUI::sort_widgets() {
+void Menu::sort_widgets() {
 	std::stable_sort(m_widgets.begin(), m_widgets.end(),
 		[](std::shared_ptr<Widget> a, std::shared_ptr<Widget> b) {
 			return a->get_render_layer() < b->get_render_layer();
@@ -63,7 +65,7 @@ void GUI::sort_widgets() {
 	);
 }
 
-bool GUI::cursor_contains(SDL_Event* event, SDL_FRect* dest_frect) {
+bool Menu::cursor_contains(SDL_Event* event, SDL_FRect* dest_frect) {
 	float mouse_x = event->button.x;
 	float mouse_y = event->button.y;
 	float dest_x = dest_frect->x;

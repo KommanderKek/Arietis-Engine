@@ -1,5 +1,7 @@
 #include "button.h"
 
+using namespace Arietis::UI;
+
 Button::Button(float x_pos, float y_pos, float width, float height, int render_layer) :
 		Widget(x_pos, y_pos, width, height, render_layer) {
 }

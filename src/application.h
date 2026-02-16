@@ -4,7 +4,7 @@
 
 class Application {
 private:
-	Engine m_engine;
+	Arietis::Core::Engine m_engine;
 
 public:
 	void init();

@@ -1,10 +1,12 @@
-#include "eventsystem.h"
+#include "event.h"
 
-EventSystem::EventSystem() {
+using namespace Arietis::Systems;
+
+Event::Event() {
 	m_quit_request = false;
 }
 
-void EventSystem::poll_events(std::vector<std::shared_ptr<WindowRenderer>> windows) {
+void Event::poll_events(std::vector<std::shared_ptr<Core::Window>> windows) {
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
 		switch (event.type) {
@@ -13,7 +15,7 @@ void EventSystem::poll_events(std::vector<std::shared_ptr<WindowRenderer>> windo
 				break;
 			case SDL_EVENT_MOUSE_BUTTON_DOWN:
 				SDL_Window* sdl_window = SDL_GetWindowFromEvent(&event);
-				for (std::shared_ptr<WindowRenderer> window : windows) {
+				for (std::shared_ptr<Core::Window> window : windows) {
 					if (window->get_sdl_window() == sdl_window) {
 						window->dispatch_event(&event);
 					}
@@ -23,10 +25,10 @@ void EventSystem::poll_events(std::vector<std::shared_ptr<WindowRenderer>> windo
 	}
 }
 
-bool EventSystem::get_quit_request() {
+bool Event::get_quit_request() {
 	return m_quit_request;
 }
 
-void EventSystem::send_quit_request() {
+void Event::send_quit_request() {
 	m_quit_request = true;
 }

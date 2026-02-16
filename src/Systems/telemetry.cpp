@@ -4,6 +4,8 @@
 
 #include <cmath>
 
+using namespace Arietis::Systems;
+
 Telemetry::Telemetry() {
 	m_frame_times = std::vector<Uint64>(128);
 	m_frame_time_index = 0;

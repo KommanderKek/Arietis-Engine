@@ -1,9 +1,11 @@
 #include "engine.h"
 
+using namespace Arietis::Core;
+
 Engine::Engine() {
-	m_event_system = nullptr;
-	m_render_system = nullptr;
-	m_update_system = nullptr;
+	m_event = nullptr;
+	m_render = nullptr;
+	m_update = nullptr;
 	m_initialized = false;
 	m_running = false;
 }
@@ -15,9 +17,9 @@ void Engine::initialize() {
 
 	SDL_Init(SDL_INIT_VIDEO);
 
-	m_event_system = std::make_unique<EventSystem>();
-	m_render_system = std::make_unique<RenderSystem>();
-	m_update_system = std::make_unique<UpdateSystem>();
+	m_event = std::make_unique<Systems::Event>();
+	m_render = std::make_unique<Systems::Render>();
+	m_update = std::make_unique<Systems::Update>();
 
 	m_initialized = true;
 	m_running = true;
@@ -28,13 +30,13 @@ void Engine::shutdown() {
 		return;
 	}
 
-	m_event_system.reset();
-	m_render_system.reset();
-	m_update_system.reset();
+	m_event.reset();
+	m_render.reset();
+	m_update.reset();
 
-	m_event_system = nullptr;
-	m_render_system = nullptr;
-	m_update_system = nullptr;
+	m_event = nullptr;
+	m_render = nullptr;
+	m_update = nullptr;
 	m_running = false;
 
 	SDL_Quit();
@@ -52,7 +54,7 @@ void Engine::run() {
 	}
 }
 
-void Engine::register_window(std::shared_ptr<WindowRenderer> window) {
+void Engine::register_window(std::shared_ptr<Window> window) {
 	if (!m_initialized) {
 		return;
 	}
@@ -60,18 +62,18 @@ void Engine::register_window(std::shared_ptr<WindowRenderer> window) {
 }
 
 void Engine::process_events() {
-	m_event_system->poll_events(m_windows);
-	if (m_event_system->get_quit_request()) {
+	m_event->poll_events(m_windows);
+	if (m_event->get_quit_request()) {
 		stop();
 	}
 }
 
 void Engine::update() {
-	m_update_system->frame_update();
+	m_update->frame_update();
 }
 
 void Engine::render() {
-	m_render_system->render_windows(m_windows);
+	m_render->render_windows(m_windows);
 }
 
 void Engine::stop() {

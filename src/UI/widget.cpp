@@ -2,6 +2,8 @@
 
 #include <SDL3/SDL.h>
 
+using namespace Arietis::UI;
+
 Widget::Widget(float x_pos, float y_pos, float width, float height, int render_layer) {
 	m_color = {128, 128, 128, 255};
 

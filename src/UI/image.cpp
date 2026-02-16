@@ -1,5 +1,7 @@
 #include "image.h"
 
+using namespace Arietis::UI;
+
 Image::Image(float x_pos, float y_pos, float width, float height, int render_layer, std::string file_name) :
 		Widget(x_pos, y_pos, width, height, render_layer) {
 	m_file_name = file_name;
