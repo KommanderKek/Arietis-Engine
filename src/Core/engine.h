@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../Systems/event.h"
-#include "../Systems/render.h"
-#include "../Systems/update.h"
-#include "../UI/image.h"
-#include "../UI/button.h"
+#include "Systems/event.h"
+#include "Systems/render.h"
+#include "Systems/update.h"
+#include "UI/image.h"
+#include "UI/button.h"
 
 namespace Arietis::Core {
 	class Engine {

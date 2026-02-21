@@ -2,7 +2,7 @@
 
 #include "widget.h"
 
-#include "SDL3/SDL.h"
+#include <SDL3/SDL.h>
 
 #include <string>
 #include <functional>

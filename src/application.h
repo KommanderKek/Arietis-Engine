@@ -1,6 +1,6 @@
 #pragma once
 
-#include "./Core/engine.h"
+#include "Core/engine.h"
 
 class Application {
 private:

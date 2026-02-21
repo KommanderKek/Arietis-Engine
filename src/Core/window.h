@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../UI/widget.h"
-#include "../UI/menu.h"
+#include "UI/widget.h"
+#include "UI/menu.h"
 
 #include <SDL3/SDL.h>
 

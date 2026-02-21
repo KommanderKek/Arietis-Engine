@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Core/window.h"
+#include "Core/window.h"
 
 #include <vector>
 #include <memory>

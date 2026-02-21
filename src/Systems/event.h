@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../Core/window.h"
+#include "Core/window.h"
 
-#include "SDL3/SDL.h"
+#include <SDL3/SDL.h>
 
 namespace Arietis::Systems {
 	class Event {
