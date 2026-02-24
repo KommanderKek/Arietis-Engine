@@ -5,6 +5,10 @@
 
 using namespace Arietis;
 
+void action() {
+	SDL_Log("Button Clicked!");
+}
+
 void Application::init() {
 	m_engine.initialize();
 
@@ -17,6 +21,8 @@ void Application::init() {
 	std::shared_ptr<UI::Image> image = std::make_shared<UI::Image>(175.0f, 175.0f, 100.0f, 100.0f, 2, "sample.bmp");
 	std::shared_ptr<UI::Button> button = std::make_shared<UI::Button>(300.0f, 300.0f, 100.0f, 100.0f, 0);
 	button->set_color(0, 0, 255, 255);
+
+	button->set_action(action);
 
 	main_menu->add_widget(widget1);
 	main_menu->add_widget(widget2);

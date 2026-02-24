@@ -41,9 +41,9 @@ void Menu::handle_event(SDL_Event* event) {
 	}
 	for (int i = m_widgets.size() - 1; i >= 0; i--) {
 		std::shared_ptr<Widget> widget = m_widgets[i];
-		if ((std::dynamic_pointer_cast<Button>(widget) != nullptr) and
-				(cursor_contains(event, widget->get_frect()))) {
-			SDL_Log("Clicked");
+		std::shared_ptr<Button> button = std::dynamic_pointer_cast<Button>(widget);
+		if ((button != nullptr) and cursor_contains(event, button->get_frect())) {
+			button->click();
 			return;
 		}
 	}

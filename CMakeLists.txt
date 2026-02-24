@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.21)
+cmake_minimum_required(VERSION 3.20)
 project(ArietisEngine LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -11,30 +11,27 @@ file(GLOB_RECURSE SOURCES
 )
 
 # Add runnable executable
-add_executable(arietis ${SOURCES})
+add_executable(Arietis ${SOURCES})
 
 # Add include directories for header files
-target_include_directories(arietis PUBLIC
+target_include_directories(Arietis PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-# Relative path to SDL3 folder
-set(SDL3_DIR "${CMAKE_SOURCE_DIR}/external/SDL3-3.4.0")
-
-# Set SDL3 include directory and link SDL3 library
-target_include_directories(arietis PRIVATE "${SDL3_DIR}/include")
-target_link_libraries(arietis PRIVATE "${SDL3_DIR}/lib/x64/SDL3.lib")
+# Link SDL
+add_subdirectory(external/SDL3)
+target_link_libraries(Arietis PRIVATE SDL3::SDL3)
 
 # Copy SDL3.dll to executable folder
-add_custom_command(TARGET arietis POST_BUILD
+add_custom_command(TARGET Arietis POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${SDL3_DIR}/lib/x64/SDL3.dll"
-        $<TARGET_FILE_DIR:arietis>
+        $<TARGET_FILE:SDL3::SDL3>
+        $<TARGET_FILE_DIR:Arietis>
 )
 
 # Copy sample.bmp to the executable folder
-add_custom_command(TARGET arietis POST_BUILD
+add_custom_command(TARGET Arietis POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "${CMAKE_SOURCE_DIR}/assets/sample.bmp"
-        $<TARGET_FILE_DIR:arietis>
+        $<TARGET_FILE_DIR:Arietis>
 )

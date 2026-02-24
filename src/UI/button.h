@@ -16,7 +16,7 @@ namespace Arietis::UI {
 	public:
 		Button(float x_pos, float y_pos, float width, float height, int render_layer);
 		void draw(SDL_Renderer* renderer) override;
-		void on_click();
+		void click();
 		void set_action(std::function<void()> function);
 		void set_button_text(std::string text);
 	};

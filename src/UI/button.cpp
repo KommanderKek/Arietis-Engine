@@ -18,7 +18,7 @@ void Button::draw(SDL_Renderer* renderer) {
 	SDL_RenderFillRect(renderer, &m_frect);
 }
 
-void Button::on_click() {
+void Button::click() {
 	if (m_click_action) {
 		m_click_action();
 	}
