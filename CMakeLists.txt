@@ -19,44 +19,29 @@ target_include_directories(Arietis PUBLIC
 )
 
 # Building and linking SDL
-set(CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/deps")
-
 find_package(SDL3 QUIET)
 find_package(SDL3_ttf QUIET)
 
-include(ExternalProject)
+include(FetchContent)
 
 if(NOT SDL3_FOUND)
-    message(STATUS "SDL3 not found. Building from source...")
-
-    ExternalProject_Add(SDL3_project
-        SOURCE_DIR ${CMAKE_SOURCE_DIR}/external/SDL-3.4.2
-        BINARY_DIR ${CMAKE_BINARY_DIR}/SDL3_build
-        CMAKE_ARGS
-            -DCMAKE_INSTALL_PREFIX=${CMAKE_SOURCE_DIR}/deps
-            -DSDL_TEST=OFF
+    message(STATUS "SDL3 not found. Fetching...")
+    FetchContent_Declare(
+        SDL3
+        GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
+        GIT_TAG release-3.4.2
     )
-
-    add_subdirectory(external/SDL-3.4.2)
-endif()
-
-if(NOT SDL3_ttf_FOUND AND SDL3_FOUND)
-    message(STATUS "SDL3_ttf not found. Building from source...")
-
-    find_package(Python3 REQUIRED COMPONENTS Interpreter)
-
-    ExternalProject_Add(SDL3_ttf_project
-        SOURCE_DIR ${CMAKE_SOURCE_DIR}/external/SDL_ttf-3.2.2
-        BINARY_DIR ${CMAKE_BINARY_DIR}/SDL3_ttf_build
-        CMAKE_ARGS
-            -DCMAKE_INSTALL_PREFIX=${CMAKE_SOURCE_DIR}/deps
-            -DCMAKE_PREFIX_PATH=${CMAKE_SOURCE_DIR}/deps
-            -DPython3_EXECUTABLE=${Python3_EXECUTABLE}
-    )
+    FetchContent_MakeAvailable(SDL3)
 endif()
 
 if(NOT SDL3_ttf_FOUND)
-    add_subdirectory(external/SDL_ttf-3.2.2)
+    message(STATUS "SDL3_ttf not found. Fetching...")
+    FetchContent_Declare(
+        SDL3_ttf
+        GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf.git
+        GIT_TAG release-3.2.2
+    )
+    FetchContent_MakeAvailable(SDL3_ttf)
 endif()
 
 target_link_libraries(Arietis

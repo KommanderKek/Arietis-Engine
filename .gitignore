@@ -1,6 +1,6 @@
 # Builds
 out
-deps
+_deps
 
 # Visual Studio cache
 .vs
