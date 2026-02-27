@@ -18,14 +18,62 @@ target_include_directories(Arietis PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-# Link SDL
-add_subdirectory(external/SDL3)
-target_link_libraries(Arietis PRIVATE SDL3::SDL3)
+# Building and linking SDL
+set(CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/deps")
 
-# Copy SDL3.dll to executable folder
+find_package(SDL3 QUIET)
+find_package(SDL3_ttf QUIET)
+
+include(ExternalProject)
+
+if(NOT SDL3_FOUND)
+    message(STATUS "SDL3 not found. Building from source...")
+
+    ExternalProject_Add(SDL3_project
+        SOURCE_DIR ${CMAKE_SOURCE_DIR}/external/SDL-3.4.2
+        BINARY_DIR ${CMAKE_BINARY_DIR}/SDL3_build
+        CMAKE_ARGS
+            -DCMAKE_INSTALL_PREFIX=${CMAKE_SOURCE_DIR}/deps
+            -DSDL_TEST=OFF
+    )
+
+    add_subdirectory(external/SDL-3.4.2)
+endif()
+
+if(NOT SDL3_ttf_FOUND AND SDL3_FOUND)
+    message(STATUS "SDL3_ttf not found. Building from source...")
+
+    find_package(Python3 REQUIRED COMPONENTS Interpreter)
+
+    ExternalProject_Add(SDL3_ttf_project
+        SOURCE_DIR ${CMAKE_SOURCE_DIR}/external/SDL_ttf-3.2.2
+        BINARY_DIR ${CMAKE_BINARY_DIR}/SDL3_ttf_build
+        CMAKE_ARGS
+            -DCMAKE_INSTALL_PREFIX=${CMAKE_SOURCE_DIR}/deps
+            -DCMAKE_PREFIX_PATH=${CMAKE_SOURCE_DIR}/deps
+            -DPython3_EXECUTABLE=${Python3_EXECUTABLE}
+    )
+endif()
+
+if(NOT SDL3_ttf_FOUND)
+    add_subdirectory(external/SDL_ttf-3.2.2)
+endif()
+
+target_link_libraries(Arietis
+    PRIVATE
+    SDL3::SDL3
+    SDL3_ttf::SDL3_ttf
+)
+
+# Copy SDL3.dll and SDL_ttf.dll to executable folder
 add_custom_command(TARGET Arietis POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE:SDL3::SDL3>
+        $<TARGET_FILE_DIR:Arietis>
+)
+add_custom_command(TARGET Arietis POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        $<TARGET_FILE:SDL3_ttf::SDL3_ttf>
         $<TARGET_FILE_DIR:Arietis>
 )
 

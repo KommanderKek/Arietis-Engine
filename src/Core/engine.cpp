@@ -1,11 +1,14 @@
 #include "engine.h"
 
+#include <SDL3/SDL.h>
+#include <SDL3_ttf/SDL_ttf.h>
+
 using namespace Arietis::Core;
 
 Engine::Engine() {
-	m_event = nullptr;
-	m_render = nullptr;
-	m_update = nullptr;
+	m_events = nullptr;
+	m_renderer = nullptr;
+	m_updates = nullptr;
 	m_initialized = false;
 	m_running = false;
 }
@@ -16,10 +19,11 @@ void Engine::initialize() {
 	}
 
 	SDL_Init(SDL_INIT_VIDEO);
+	TTF_Init();
 
-	m_event = std::make_unique<Systems::Event>();
-	m_render = std::make_unique<Systems::Render>();
-	m_update = std::make_unique<Systems::Update>();
+	m_events = std::make_unique<Systems::Events>();
+	m_renderer = std::make_unique<Systems::Renderer>();
+	m_updates = std::make_unique<Systems::Updates>();
 
 	m_initialized = true;
 	m_running = true;
@@ -30,15 +34,16 @@ void Engine::shutdown() {
 		return;
 	}
 
-	m_event.reset();
-	m_render.reset();
-	m_update.reset();
+	m_events.reset();
+	m_renderer.reset();
+	m_updates.reset();
 
-	m_event = nullptr;
-	m_render = nullptr;
-	m_update = nullptr;
+	m_events = nullptr;
+	m_renderer = nullptr;
+	m_updates = nullptr;
 	m_running = false;
 
+	TTF_Quit();
 	SDL_Quit();
 }
 
@@ -62,18 +67,18 @@ void Engine::register_window(std::shared_ptr<Window> window) {
 }
 
 void Engine::process_events() {
-	m_event->poll_events(m_windows);
-	if (m_event->get_quit_request()) {
+	m_events->poll_events(m_windows);
+	if (m_events->get_quit_request()) {
 		stop();
 	}
 }
 
 void Engine::update() {
-	m_update->frame_update();
+	m_updates->frame_update();
 }
 
 void Engine::render() {
-	m_render->render_windows(m_windows);
+	m_renderer->render_windows(m_windows);
 }
 
 void Engine::stop() {

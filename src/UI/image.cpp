@@ -1,5 +1,7 @@
 #include "image.h"
 
+#include <SDL3/SDL.h>
+
 using namespace Arietis::UI;
 
 Image::Image(float x_pos, float y_pos, float width, float height, int render_layer, std::string file_name) :
@@ -16,7 +18,7 @@ void Image::draw(SDL_Renderer* renderer) {
 		return;
 	}
 	if (!m_texture) {
-		load_texture(renderer);
+		load_textures(renderer);
 	}
 	SDL_RenderTexture(renderer, m_texture, NULL, &m_frect);
 }

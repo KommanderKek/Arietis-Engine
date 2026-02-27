@@ -1,5 +1,7 @@
 #include "window.h"
 
+#include <SDL3/SDL.h>
+
 #include <algorithm>
 
 using namespace Arietis::Core;

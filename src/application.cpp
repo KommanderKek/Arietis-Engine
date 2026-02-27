@@ -1,5 +1,13 @@
 #include "application.h"
 
+#include "Core/window.h"
+#include "UI/menu.h"
+#include "UI/widget.h"
+#include "UI/image.h"
+#include "UI/button.h"
+
+#include <SDL3/SDL.h>
+
 #include <memory>
 #include <functional>
 

@@ -28,7 +28,7 @@ void Widget::draw(SDL_Renderer* renderer) {
 		return;
 	}
 	if (!m_texture) {
-		load_texture(renderer);
+		load_textures(renderer);
 	}
 	SDL_SetRenderTarget(renderer, NULL);
 	SDL_SetRenderDrawColor(renderer, m_color[0], m_color[1], m_color[2], m_color[3]);
@@ -67,7 +67,7 @@ void Widget::set_enabled(bool enabled) {
 	m_enabled = enabled;
 }
 
-void Widget::load_texture(SDL_Renderer* renderer) {
+void Widget::load_textures(SDL_Renderer* renderer) {
 	SDL_Surface* surface = SDL_LoadSurface(m_file_name.c_str());
 	m_texture = SDL_CreateTextureFromSurface(renderer, surface);
 	SDL_DestroySurface(surface);
